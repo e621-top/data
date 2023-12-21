@@ -1,5 +1,5 @@
 import fs from "fs";
-import { get_page } from "./api.js";
+import { getCharacters, getCurrent } from "./api.js";
 import { sleepMS } from "./helpers/index.js";
 import { Data, Tag } from "./types.js";
 
@@ -16,7 +16,7 @@ async function update() {
 
     for (let page = 1; ; page++) {
         console.log(`Fetching page: ${page}`);
-        const response = await get_page(page);
+        const response = await getCharacters(page);
         const tags = response
             .filter(t => !blacklist.has(t.name) && t.post_count >= post_min)
             .map<Tag>(t => {
@@ -35,9 +35,18 @@ async function update() {
             await sleepMS(500);
         }
     }
-    // TODO: add compare with old data
 
-    console.log(`Saving data: ${data.tags.length} characters`);
+    console.log("Updating delta");
+    const current = await getCurrent();
+    data.tags.forEach(t => {
+        const tag = current.tags.find(c => c.id == t.id);
+        const delta = (tag?.post_count ?? 0) - t.post_count;
+        if (tag && delta != 0) {
+            t.post_delta = delta;
+        }
+    });
+
+    console.log(`Saving data: ${data.tags.length} character tags`);
     if (!fs.existsSync(site)) { fs.mkdirSync(site); }
     fs.writeFileSync(`${site}/character.json`, JSON.stringify(data, null, 4));
     console.log("Update done");
