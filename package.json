@@ -1,0 +1,36 @@
+{
+  "name": "e621-top.data",
+  "version": "1.0.0",
+  "description": "e621",
+  "author": "Virenbar",
+  "license": "MIT",
+  "repository": "e621-top/data",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node build/index.js",
+    "start:dev": "yarn build && node build/index.js",
+    "update": "tsx ./src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "lodash": "^4.17.21",
+    "tsx": "^4.7.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/strictest": "^2.0.2",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "packageManager": "yarn@4.0.2"
+}
