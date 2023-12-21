@@ -1,0 +1,22 @@
+name: "Setup Node.js"
+description: "Setups Node.js and restores Yarn cache"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: "yarn"
+
+    - name: Check config
+      id: yarn-config
+      shell: bash
+      run: echo "CACHE=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+    - name: Restore cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.yarn-config.outputs.CACHE }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        restore-keys: ${{ runner.os }}-yarn-
