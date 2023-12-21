@@ -18,8 +18,20 @@ jobs:
         with:
           node-version: 20.x
           cache: "yarn"
+      
+      - name: Check config
+        id: yarn-config
+        run: echo "CACHE=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+        
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-config.outputs.CACHE }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Build Package
         run: |
-          yarn install --immutable --immutable-cache --check-cache
+          yarn install --immutable
           yarn build
+
