@@ -40,7 +40,7 @@ async function update() {
     const current = await getCurrent();
     data.tags.forEach(t => {
         const tag = current.tags.find(c => c.id == t.id);
-        const delta = (tag?.post_count ?? 0) - t.post_count;
+        const delta = t.post_count - (tag?.post_count ?? 0);
         if (tag && delta != 0) {
             t.post_delta = delta;
         }
