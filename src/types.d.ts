@@ -15,6 +15,7 @@ export interface Tag {
     name: string
     post_count: number
     created_at: string
+    position: number
     post_delta?: number
 }
 

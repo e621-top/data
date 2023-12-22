@@ -5,7 +5,12 @@ import { Data, Tag } from "./types.js";
 
 const site = "_site";
 const post_min = 100;
-const blacklist = new Set(["fan_character", "webcomic_character", "anon"]);
+const blacklist = new Set([
+    "anon",
+    "fan_character",
+    "unknown_character",
+    "webcomic_character"
+]);
 
 async function update() {
     console.log("Update started");
@@ -14,6 +19,7 @@ async function update() {
         tags: []
     };
 
+    let position = 1;
     for (let page = 1; ; page++) {
         console.log(`Fetching page: ${page}`);
         const response = await getCharacters(page);
@@ -25,7 +31,8 @@ async function update() {
                     id,
                     name,
                     post_count,
-                    created_at
+                    created_at,
+                    position: position++
                 };
             });
         data.tags.push(...tags);
@@ -49,6 +56,7 @@ async function update() {
     console.log(`Saving data: ${data.tags.length} character tags`);
     if (!fs.existsSync(site)) { fs.mkdirSync(site); }
     fs.writeFileSync(`${site}/character.json`, JSON.stringify(data, null, 4));
+    fs.copyFileSync("README.md", `${site}/README.md`);
     console.log("Update done");
 }
 
