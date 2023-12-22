@@ -56,7 +56,7 @@ async function update() {
     console.log(`Saving data: ${data.tags.length} character tags`);
     if (!fs.existsSync(site)) { fs.mkdirSync(site); }
     fs.writeFileSync(`${site}/character.json`, JSON.stringify(data, null, 4));
-    fs.copyFileSync("README.md", `${site}/README.md`);
+    fs.copyFileSync("src/index.html", `${site}/index.html`);
     console.log("Update done");
 }
 
