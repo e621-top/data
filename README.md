@@ -2,6 +2,7 @@
 
 Automatic data generator for e621-top.
 
+* [artist.json][artist-href]
 * [character.json][character-href]
 
 <!-- Badges -->
@@ -9,4 +10,5 @@ Automatic data generator for e621-top.
 [update-href]: https://github.com/e621-top/data/actions/workflows/update.yml
 
 <!-- Other -->
+[artist-href]: https://e621-top.github.io/data/artist.json
 [character-href]: https://e621-top.github.io/data/character.json
