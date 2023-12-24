@@ -873,6 +873,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:^16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
+  languageName: node
+  linkType: hard
+
 "e621-top.data@workspace:.":
   version: 0.0.0-use.local
   resolution: "e621-top.data@workspace:."
@@ -882,6 +889,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.15.0"
     "@typescript-eslint/parser": "npm:^6.15.0"
+    dotenv: "npm:^16.3.1"
     eslint: "npm:^8.56.0"
     eslint-plugin-import: "npm:^2.29.1"
     tsx: "npm:^4.7.0"

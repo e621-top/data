@@ -1,19 +1,24 @@
+import "dotenv/config";
 import fs from "fs";
-import { getCharacters, getCurrent } from "./api.js";
+import { getData, getTags } from "./api.js";
 import { sleepMS } from "./helpers/index.js";
-import { Data, Tag } from "./types.js";
+import { Category, Data, Tag } from "./types.js";
 
 const site = "_site";
-const post_min = 100;
 const blacklist = new Set([
     "anon",
+    "anonymous_artist",
+    "conditional_dnp",
     "fan_character",
+    "sound_warning",
+    "third-party_edit",
+    "unknown_artist",
     "unknown_character",
     "webcomic_character"
 ]);
 
-async function update() {
-    console.log("Update started");
+async function updateTags(category: Category, limit: number) {
+    console.info(`Updating ${category} tags`);
     const data: Data = {
         updated_at: new Date(),
         tags: []
@@ -21,10 +26,10 @@ async function update() {
 
     let position = 1;
     for (let page = 1; ; page++) {
-        console.log(`Fetching page: ${page}`);
-        const response = await getCharacters(page);
+        console.debug(`Fetching page: ${page}`);
+        const response = await getTags(category, page);
         const tags = response
-            .filter(t => !blacklist.has(t.name) && t.post_count >= post_min)
+            .filter(t => !blacklist.has(t.name) && t.post_count >= limit)
             .map<Tag>(t => {
                 const { id, name, post_count, created_at } = t;
                 return {
@@ -36,28 +41,39 @@ async function update() {
                 };
             });
         data.tags.push(...tags);
-        if (response.some(t => t.post_count < post_min)) {
+        if (response.some(t => t.post_count < limit)) {
             break;
         } else {
             await sleepMS(500);
         }
     }
 
-    console.log("Updating delta");
-    const current = await getCurrent();
-    data.tags.forEach(t => {
-        const tag = current.tags.find(c => c.id == t.id);
-        const delta = t.post_count - (tag?.post_count ?? 0);
-        if (tag && delta != 0) {
-            t.post_delta = delta;
-        }
-    });
+    try {
+        console.debug("Calculating delta");
+        const current = await getData(category);
+        data.tags.forEach(t => {
+            const tag = current.tags.find(c => c.id == t.id);
+            const delta = t.post_count - (tag?.post_count ?? 0);
+            if (tag && delta != 0) {
+                t.post_delta = delta;
+            }
+        });
+    } catch (error) {
+        console.warn(error);
+    }
+    console.info(`Saving data: ${data.tags.length} ${category} tags`);
+    fs.writeFileSync(`${site}/${category}.json`, JSON.stringify(data));
+}
 
-    console.log(`Saving data: ${data.tags.length} character tags`);
+async function update() {
+    console.info("Update started");
     if (!fs.existsSync(site)) { fs.mkdirSync(site); }
-    fs.writeFileSync(`${site}/character.json`, JSON.stringify(data, null, 4));
+
+    await updateTags("character", 100);
+    await updateTags("artist", 200);
+
     fs.copyFileSync("src/index.html", `${site}/index.html`);
-    console.log("Update done");
+    console.info("Update done");
 }
 
 await update();

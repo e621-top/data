@@ -8,10 +8,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Script",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": [
+                "start"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\build\\index.js",
             "preLaunchTask": "tsc: build",
             "outFiles": [
                 "${workspaceFolder}/build/**/*.js"

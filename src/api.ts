@@ -1,20 +1,33 @@
-import { APITag, Data } from "./types.js";
+import { env } from "process";
+import { APITag, Category, Data } from "./types.js";
 
 const endpoint_api = "https://e621.net";
-const endpoint_site = "https://e621-top.github.io";
+const endpoint_site = "https://e621-top.github.io/data";
 
-async function get<T>(url: string) {
-    const response = await fetch(url, { headers: { "User-Agent": "E621-Top/1.0 (Artinis)" } });
+const CategoryNumber: Record<Category, number> = {
+    "artist": 1,
+    "character": 4
+};
+
+async function get<T>(url: string | URL | Request) {
+    const response = await fetch(url, { headers: { "User-Agent": env["USER_AGENT"] as string } });
     if (!response.ok) {
         throw new Error(`${response.status}: ${response.statusText}`);
     }
     return await response.json() as T;
 }
 
-export async function getCharacters(page: number = 1) {
-    return get<APITag[]>(`${endpoint_api}/tags.json?limit=320&search[hide_empty]=1&search[order]=count&search[category]=4&page=${page}`);
+export async function getTags(category: Category, page: number) {
+    const url = new URL(`${endpoint_api}/tags.json`);
+    const params = url.searchParams;
+    params.append("search[hide_empty]", "1");
+    params.append("search[order]", "count");
+    params.append("search[category]", `${CategoryNumber[category]}`);
+    params.append("page", `${page}`);
+    params.append("limit", "320");
+    return get<APITag[]>(url);
 }
 
-export async function getCurrent() {
-    return get<Data>(`${endpoint_site}/data/character.json`);
+export async function getData(category: Category) {
+    return get<Data>(`${endpoint_site}/${category}.json`);
 }

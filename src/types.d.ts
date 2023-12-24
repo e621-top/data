@@ -1,3 +1,5 @@
+export type Category = "character" | "artist"
+
 export interface APITag {
     id: number
     name: string
