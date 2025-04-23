@@ -1,14 +1,15 @@
 {
   "editor.formatOnSave": true,
-  "eslint.validate": [
-    "javascript",
-    "typescript"
-  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "eslint.validate": [
+    "javascript",
+    "typescript"
+  ],
+  "eslint.useFlatConfig": true,
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true

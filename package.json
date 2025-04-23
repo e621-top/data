@@ -11,23 +11,22 @@
     "update": "tsx ./src/index.ts"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "tsx": "^4.7.0"
+    "dotenv": "^16.5.0",
+    "tsx": "^4.13.3"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "@tsconfig/strictest": "^2.0.2",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-import": "^2.29.1",
-    "typescript": "^5.3.3"
+    "@eslint/js": "^9.24.0",
+    "@tsconfig/node22": "^22.0.1",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.14.0",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "private": true,
   "type": "module",
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.9.1"
 }
