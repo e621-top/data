@@ -1,4 +1,5 @@
 import { env } from "process";
+import { fetchRetry } from "./helpers/fetch.js";
 import { APITag, Category, Data } from "./types.js";
 
 const endpoint_api = "https://e621.net";
@@ -10,10 +11,7 @@ const CategoryNumber: Record<Category, number> = {
 };
 
 async function get<T>(url: string | URL | Request) {
-    const response = await fetch(url, { headers: { "User-Agent": env["USER_AGENT"] as string } });
-    if (!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}`);
-    }
+    const response = await fetchRetry(url, { headers: { "User-Agent": env["USER_AGENT"] as string } });
     return await response.json() as T;
 }
 
