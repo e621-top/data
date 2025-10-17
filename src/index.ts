@@ -8,6 +8,7 @@ const site = "_site";
 const blacklist = new Set([
     "anon",
     "anonymous_artist",
+    "avoid_posting",
     "conditional_dnp",
     "fan_character",
     "sound_warning",
