@@ -16,9 +16,12 @@ export interface Tag {
     id: number
     name: string
     post_count: number
+    post_counts?: number[]
     created_at: string
     position: number
     post_delta?: number
+    post_delta_day?: number
+    post_delta_week?: number
 }
 
 export interface Data {

@@ -18,6 +18,11 @@ const blacklist = new Set([
     "webcomic_character"
 ]);
 
+/**
+ * 
+ * @param category Tag category
+ * @param limit Minimum count of posts
+ */
 async function updateTags(category: Category, limit: number) {
     console.info(`Updating ${category} tags`);
     const data: Data = {
@@ -37,7 +42,8 @@ async function updateTags(category: Category, limit: number) {
                     id,
                     name,
                     post_count,
-                    created_at,
+                    post_counts: [post_count],
+                    created_at: created_at.split("T")[0],
                     position: position++
                 };
             });
@@ -50,14 +56,33 @@ async function updateTags(category: Category, limit: number) {
     }
 
     try {
-        console.debug("Calculating delta");
+        console.debug("Fetching current data");
         const current = await getData(category);
         data.tags.forEach(t => {
             const tag = current.tags.find(c => c.id == t.id);
-            const delta = t.post_count - (tag?.post_count ?? 0);
-            if (tag && delta != 0) {
+            if (!tag) { return; }
+            const delta = t.post_count - (tag.post_count);
+            if (delta != 0) {
                 t.post_delta = delta;
             }
+            const history = tag.post_counts?.slice(0, 7);
+            if (history) {
+                t.post_counts?.push(...history);
+            }
+            /*
+            // Copy last 6 counts from current data
+            t.post_counts.push(...tag.post_counts.slice(0, 7));
+            // Day delta
+            const day_delta = t.post_counts[0] - t.post_counts[1];
+            if (day_delta != 0) {
+                t.post_delta_day = day_delta;
+            }
+            // Week delta
+            const week_delta = t.post_counts[0] - t.post_counts.at(-1);
+            if (week_delta != 0) {
+                t.post_delta_week = week_delta;
+            }
+            */
         });
     } catch (error) {
         console.warn(error);
