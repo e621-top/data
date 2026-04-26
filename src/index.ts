@@ -61,28 +61,26 @@ async function updateTags(category: Category, limit: number) {
         data.tags.forEach(t => {
             const tag = current.tags.find(c => c.id == t.id);
             if (!tag) { return; }
-            const delta = t.post_count - (tag.post_count);
-            if (delta != 0) {
-                t.post_delta = delta;
-            }
-            const history = tag.post_counts?.slice(0, 7);
-            if (history) {
-                t.post_counts?.push(...history);
-            }
-            /*
+
             // Copy last 6 counts from current data
-            t.post_counts.push(...tag.post_counts.slice(0, 7));
+            const history = tag.post_counts.slice(0, 7);
+            if (history) {
+                t.post_counts.push(...history);
+            }
+
+            const count = t.post_counts.at(0) ?? 0;
             // Day delta
-            const day_delta = t.post_counts[0] - t.post_counts[1];
-            if (day_delta != 0) {
-                t.post_delta_day = day_delta;
+            const count_day = t.post_counts.at(1) ?? 0;
+            const delta_day = count - count_day;
+            if (delta_day != 0) {
+                t.post_delta_day = delta_day;
             }
             // Week delta
-            const week_delta = t.post_counts[0] - t.post_counts.at(-1);
-            if (week_delta != 0) {
-                t.post_delta_week = week_delta;
+            const count_week = t.post_counts.at(-1) ?? 0;
+            const delta_week = count - count_week;
+            if (delta_week != 0) {
+                t.post_delta_week = delta_week;
             }
-            */
         });
     } catch (error) {
         console.warn(error);
