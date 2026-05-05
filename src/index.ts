@@ -55,36 +55,33 @@ async function updateTags(category: Category, limit: number) {
         }
     }
 
-    try {
-        console.debug("Fetching current data");
-        const current = await getData(category);
-        data.tags.forEach(t => {
-            const tag = current.tags.find(c => c.id == t.id);
-            if (!tag) { return; }
+    console.debug("Fetching current data");
+    const current = await getData(category);
+    data.tags.forEach(t => {
+        const tag = current.tags.find(c => c.id == t.id);
+        if (!tag) { return; }
 
-            // Copy last 6 counts from current data
-            const history = tag.post_counts.slice(0, 7);
-            if (history) {
-                t.post_counts.push(...history);
-            }
+        // Copy last 7 counts from current data
+        const history = tag.post_counts.slice(0, 7);
+        if (history) {
+            t.post_counts.push(...history);
+        }
 
-            const count = t.post_counts.at(0) ?? 0;
-            // Day delta
-            const count_day = t.post_counts.at(1) ?? 0;
-            const delta_day = count - count_day;
-            if (delta_day != 0) {
-                t.post_delta_day = delta_day;
-            }
-            // Week delta
-            const count_week = t.post_counts.at(-1) ?? 0;
-            const delta_week = count - count_week;
-            if (delta_week != 0) {
-                t.post_delta_week = delta_week;
-            }
-        });
-    } catch (error) {
-        console.warn(error);
-    }
+        const count = t.post_counts.at(0) ?? 0;
+        // Day delta
+        const count_day = t.post_counts.at(1) ?? 0;
+        const delta_day = count - count_day;
+        if (delta_day != 0) {
+            t.post_delta_day = delta_day;
+        }
+        // Week delta
+        const count_week = t.post_counts.at(-1) ?? 0;
+        const delta_week = count - count_week;
+        if (delta_week != 0) {
+            t.post_delta_week = delta_week;
+        }
+    });
+
     console.info(`Saving data: ${data.tags.length} ${category} tags`);
     fs.writeFileSync(`${site}/${category}.json`, JSON.stringify(data));
 }
