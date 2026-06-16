@@ -18,7 +18,7 @@ export async function fetchRetry(url: string | URL | Request, options?: RequestI
             console.error(error);
         }
 
-        if (retries < MAX_RETRIES - 1) {
+        if (retries < MAX_RETRIES) {
             await sleep(DELAY * (2 ** retries));
             retries++;
         }
