@@ -4,13 +4,17 @@
         "@tsconfig/node24/tsconfig.json"
     ],
     "compilerOptions": {
+        "rootDir": "./src",
         "outDir": "build",
         "sourceMap": true,
         "resolveJsonModule": true,
         "declaration": true,
         "noUncheckedIndexedAccess": false,
         "moduleResolution": "NodeNext",
-        "module": "NodeNext"
+        "module": "NodeNext",
+        "types": [
+            "node"
+        ]
     },
     "include": [
         "src/**/*"
