@@ -6,7 +6,7 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
-        node-version: 24.x
+        node-version: "lts/*"
         cache: "yarn"
 
     - name: Check config
@@ -15,8 +15,8 @@ runs:
       run: echo "CACHE=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
     - name: Restore cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ${{ steps.yarn-config.outputs.CACHE }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
-        restore-keys: ${{ runner.os }}-yarn-
+        key: yarn-cache-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        restore-keys: yarn-cache-${{ runner.os }}-
